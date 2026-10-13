@@ -124,6 +124,8 @@ allocproc(void)
 found:
   p->pid = allocpid();
   p->state = USED;
+  p->sandbox_mask = 0;
+  safestrcpy(p->sandbox_path, "-", sizeof(p->sandbox_path));
 
   // Allocate a trapframe page.
   if ((p->trapframe = (struct trapframe *)kalloc()) == 0) {
@@ -274,6 +276,9 @@ kfork(void)
     return -1;
   }
   np->sz = p->sz;
+  np->sandbox_mask = p->sandbox_mask;
+  safestrcpy(np->sandbox_path, p->sandbox_path,
+             sizeof(np->sandbox_path));
 
   // copy saved user registers.
   *(np->trapframe) = *(p->trapframe);

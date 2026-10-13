@@ -110,3 +110,25 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+uint64
+sys_interpose(void)
+{
+  int mask;
+  char path[MAXPATH];
+  struct proc *p = myproc();
+
+  // Do not allow a process to replace an active sandbox.
+  if (p->sandbox_mask != 0)
+    return -1;
+
+  argint(0, &mask);
+
+  if (argstr(1, path, MAXPATH) < 0)
+    return -1;
+
+  p->sandbox_mask = mask;
+  safestrcpy(p->sandbox_path, path, sizeof(p->sandbox_path));
+
+  return 0;
+}

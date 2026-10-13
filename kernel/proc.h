@@ -1,3 +1,4 @@
+#include "param.h"
 // Saved registers for kernel context switches.
 struct context {
   uint64 ra;
@@ -81,6 +82,8 @@ enum procstate { UNUSED, USED, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
 // Per-process state
 struct proc {
   struct spinlock lock;
+    int sandbox_mask;
+  char sandbox_path[MAXPATH];
 
   // p->lock must be held when using these:
   enum procstate state; // Process state
