@@ -278,16 +278,12 @@ UPROGS += \
 endif
 
 UEXTRA=
-ifeq ($(LAB),util)
-	UEXTRA += user/findtest.sh
-	UEXTRA += user/sixfive.txt
-	UPROGS += $U/_memdump
-	UPROGS += $U/_sleep
-	UPROGS += $U/_sixfive
-	UPROGS += $U/_find
-endif
+UEXTRA += user/findtest.sh
+UEXTRA += user/sixfive.txt
+UPROGS += $U/_memdump
+
 ifeq ($(LAB),syscall)
-	UEXTRA += user/exec.sh
+   UEXTRA += user/exec.sh
 endif
 
 fs.img: mkfs/mkfs README $(UEXTRA) $(UPROGS)

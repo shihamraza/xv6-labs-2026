@@ -1,0 +1,23 @@
+1. The function that calls syscall() is usertrap(), in kernel/trap.c.
+
+2. p->trapframe->a7 contains the system-call number supplied by the user
+   program. The syscall dispatcher uses this number to select the appropriate
+   kernel system-call handler.
+
+3. The CPU was previously executing in user mode. The SPP bit in sstatus
+   records the previous privilege mode; SPP = 0 indicates user mode.
+
+4. Replacing the assignment to num with num = *(int *)0 causes the kernel
+   to load a value from virtual address zero. The exact faulting assembly
+   instruction and destination register must be identified from this build's
+   kernel/kernel.asm or the GDB session.
+
+5. Confirm the faulting instruction using GDB by examining the saved
+   exception program counter (sepc) and disassembling the instruction at
+   that address.
+
+6. The kernel crashes because address zero is not mapped for the attempted
+   kernel memory access. The RISC-V scause value identifies the exception as
+   a load page fault when its value is 0xd.
+
+7. Record the process name and PID printed in the actual kernel panic output.
